@@ -5,6 +5,7 @@
 // load dependencies
 const User = require('../models/User');
 const LocalStrategy = require('passport-local').Strategy;
+const winston = require('winston');
 
 module.exports = (passport) => {
   /**
@@ -26,19 +27,21 @@ module.exports = (passport) => {
 
   // strategy for local signup
   passport.use('local-signup', new LocalStrategy({
-    passReqToCallback: true
-  }, async (req, username, password, done) => {
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true,
+  }, async (req, email, password, done) => {
     // User.findOne wont fire unless data is sent back
     process.nextTick(() => {
-      // check if user username already exists in DB
-      User.findOne({ 'local.username': username }, async (err, existingUser) => {
+      // check if user email already exists in DB
+      User.findOne({ 'local.email': email }, async (err, existingUser) => {
         if (err) {
           return done(err);
         }
 
         if (existingUser) {
-          // username exists in DB
-          return done(null, false, req.flash('signupMessage', 'That username already exists'));
+          // email exists in DB
+          return done(null, false, req.flash('signupMessage', 'That email already exists'));
         }
 
         /**
@@ -47,13 +50,14 @@ module.exports = (passport) => {
          * else create entirely new user
          */
         const localUser = req.user ? req.user : new User();
-        localUser.local.username = username;
+        localUser.local.email = email;
         localUser.local.password = localUser.generateHash(password);
+        localUser.local.firstName = req.body.firstName;
         try {
           await localUser.save();
           return done(null, localUser, req.flash('message', 'Local account signup successful'));
         } catch (e) {
-          console.error(e);
+          winston.log('error', `Error!: ${e}`);
         }
 
         // function gets here means local signup failed
@@ -65,18 +69,20 @@ module.exports = (passport) => {
 
   // local strategy for login
   passport.use('local-login', new LocalStrategy({
-    passReqToCallback: true
-  }, (req, username, password, done) => {
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true,
+  }, (req, email, password, done) => {
     process.nextTick(() => {
-      // check if username exists
-      User.findOne({ 'local.username': username }, (err, user) => {
+      // check if email exists
+      User.findOne({ 'local.email': email }, (err, user) => {
         if (err) {
           return done(err);
         }
 
-        // wrong username
+        // wrong email
         if (!user) {
-          return done(null, false, req.flash('loginMessage', 'Username is incorrect'));
+          return done(null, false, req.flash('loginMessage', 'email is incorrect'));
         }
 
         // wrong password

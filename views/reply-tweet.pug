@@ -1,0 +1,14 @@
+extends layout
+
+include mixins/_tweetInfo
+include mixins/_reply
+
+block content
+  section(class="container")
+    div(class="form-container col-md-offset-2 col-md-8 col-xs-12")
+      div(class="row")
+        div(class="col-md-10 col-md-offset-1 col-xs-12")
+          div(class="job-group")
+      +tweetInfo('Main Tweet', tweet.tweetContent, tweet.author.local.firstName)
+      +reply(tweet)
+      

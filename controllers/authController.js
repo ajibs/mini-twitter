@@ -29,12 +29,5 @@ exports.isLoggedIn = (req, res, next) => {
     return;
   }
 
-  return next(); // carry on! user is logged in
+  next(); // carry on! user is logged in
 };
-
-
-exports.googleAuth = passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] });
-exports.googleCallback = passport.authenticate('google', {
-  successRedirect: '/profile',
-  failureRedirect: '/login',
-});

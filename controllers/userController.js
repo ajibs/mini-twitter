@@ -1,3 +1,5 @@
+const Tweet = require('../models/Tweet');
+
 exports.showSignup = (req, res) => {
   res.render('signup', {
     title: 'Signup',
@@ -13,9 +15,14 @@ exports.showLogin = (req, res) => {
 
 
 exports.validateSignup = (req, res, next) => {
-  req.checkBody('username', 'You must supply a name!').notEmpty();
-  req.sanitizeBody('username');
+  req.checkBody('email', 'You must supply an email address!').isEmail();
+  req.sanitizeBody('email').normalizeEmail({
+    remove_dots: false,
+    remove_extension: false,
+    gmail_remove_subaddress: false,
+  });
   req.checkBody('password', 'Password cannot be blank').notEmpty();
+  req.checkBody('firstName', 'You must supply a firstName!').notEmpty();
 
   const errors = req.validationErrors();
   if (errors) {
@@ -29,15 +36,15 @@ exports.validateSignup = (req, res, next) => {
   next(); // there were no errors
 };
 
-exports.showProfile = (req, res) => {
+exports.showProfile = async (req, res) => {
+  const tweets = await Tweet
+    .find({})
+    .populate('author')
+    .sort({ _id: -1 }) // sort according to the most recent
+    .limit(5);
+
   res.render('profile', {
     title: 'Profile',
-  });
-};
-
-
-exports.showDemo = (req, res) => {
-  res.render('demo', {
-    title: 'Demo',
+    tweets,
   });
 };

@@ -1,55 +1,73 @@
 const express = require('express');
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
-const tourismController = require('../controllers/tourismController');
+const tweetController = require('../controllers/tweetController');
+const utilitiesController = require('../controllers/utilitiesController');
+const commentController = require('../controllers/commentController');
+
 const { catchErrors } = require('../handlers/errorHandlers');
 
 const router = express.Router();
 
-
-router.get('/', catchErrors(tourismController.showHome));
+router.get('/', catchErrors(tweetController.showHome));
 
 router.get('/signup', userController.showSignup);
 router.post(
   '/signup',
   userController.validateSignup,
-  authController.signup
+  utilitiesController.sanitizeData,
+  authController.signup,
 );
 
 router.get('/login', userController.showLogin);
-router.post('/login', authController.login);
+router.post(
+  '/login',
+  utilitiesController.sanitizeData,
+  authController.login,
+);
+
 
 router.get('/logout', authController.logout);
 
-router.get('/profile', userController.showProfile);
-
-
 router.get(
-  '/create-tweet',
+  '/profile',
   authController.isLoggedIn,
-  tourismController.showTourForm
+  catchErrors(userController.showProfile),
 );
+
+
 router.post(
   '/create-tweet',
   authController.isLoggedIn,
-  catchErrors(tourismController.addNewTour)
+  tweetController.validateTweet,
+  utilitiesController.sanitizeData,
+  catchErrors(tweetController.addNewTweet),
 );
 
 
-router.get('/explore', tourismController.showExplore);
-router.post('/explore', catchErrors(tourismController.searchTours));
+router.get('/tweet/:id', catchErrors(tweetController.showTweetDetails));
 
-
-router.get('/tour/:id', catchErrors(tourismController.showSingleTour));
 router.get(
-  '/tour/reserve/:id',
+  '/tweet/reply/:id',
   authController.isLoggedIn,
-  catchErrors(tourismController.reserveTour)
+  catchErrors(tweetController.showReplyField),
+);
+router.post(
+  '/tweet/reply/:id',
+  authController.isLoggedIn,
+  utilitiesController.sanitizeData,
+  catchErrors(commentController.addComment),
 );
 
 
-router.get('/demo', userController.showDemo);
-// router.get('/seed', catchErrors(tourismController.seedDB));
+router.get('/explore', catchErrors(tweetController.showExplore));
+router.post(
+  '/tweet/likes/:id',
+  authController.isLoggedIn,
+  catchErrors(tweetController.incrementLikes),
+);
+
+router.get('/seed', catchErrors(utilitiesController.seedDB));
 
 
 module.exports = router;
