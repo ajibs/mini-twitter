@@ -68,6 +68,8 @@ module.exports = (passport) => {
 
   // local strategy for login
   passport.use('local-login', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
     passReqToCallback: true,
   }, (req, email, password, done) => {
     process.nextTick(() => {
