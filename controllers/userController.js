@@ -1,3 +1,5 @@
+const Tweet = require('../models/Tweet');
+
 exports.showSignup = (req, res) => {
   res.render('signup', {
     title: 'Signup',
@@ -29,15 +31,13 @@ exports.validateSignup = (req, res, next) => {
   next(); // there were no errors
 };
 
-exports.showProfile = (req, res) => {
+exports.showProfile = async (req, res) => {
+  const tweets = await Tweet.find({})
+    .sort({ _id: -1 }) // sort according to the most recent
+    .limit(5);
+
   res.render('profile', {
     title: 'Profile',
-  });
-};
-
-
-exports.showDemo = (req, res) => {
-  res.render('demo', {
-    title: 'Demo',
+    tweets,
   });
 };

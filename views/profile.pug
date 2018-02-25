@@ -10,7 +10,19 @@ block content
         input(type="hidden" name="_csrf" value= csrfToken)
         div(class="row")
           div(class="form-group col-sm-8")
-            label(for='weet')
-            input(class="form-control" type="text" name='tweet' id='tweet' placeholder="What's happening?" required)
+            label(for='tweet')
+            textarea(class="form-control" type="text" name='tweetContent' id='tweet' placeholder="What's happening?" maxlength="200" required)
         div(form-footer form-group pull-right)
           input(class="btn btn-success" type="submit" value="Tweet")
+
+      div(class="row")
+        each t, index in tweets
+            div(class="col-lg-4 col-md-6 mb-4 form-footer")
+              div(class="card h-100")
+                div(class="card-body")
+                  p(class="card-text") #{t.tweetContent}
+                div(class="card-footer")
+                  a(href=`/reply`)
+                    button(class="btn btn-success icon-wrapper") Reply
+                  a(href=`/view-replies`)
+                    button(class="btn btn-success icon-wrapper") View Replies
