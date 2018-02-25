@@ -10,7 +10,7 @@ mongoose.connection.on('error', (err) => {
 
 
 // import all of our models
-require('./models/Comment');
+require('./models/Comment')
 require('./models/Tweet');
 require('./models/User');
 
@@ -19,3 +19,4 @@ const app = require('./app');
 app.listen(process.env.PORT, () => {
   console.log(`Magic is happening on ${process.env.PORT}`);
 });
+

@@ -55,6 +55,8 @@ router.post(
   catchErrors(commentController.addComment),
 );
 
+// router.post('/tweet/notify', catchErrors(tweetController.notification));
+
 router.get('/explore', catchErrors(tweetController.showExplore));
 
 

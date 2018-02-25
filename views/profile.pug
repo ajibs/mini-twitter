@@ -16,7 +16,7 @@ block content
           input(class="btn btn-success" type="submit" value="Tweet")
 
       div(class="row")
-        each t, index in tweets
+        each t in tweets
             div(class="col-lg-4 col-md-6 mb-4 form-footer")
               div(class="card h-100")
                 div(class="card-body")
@@ -26,3 +26,7 @@ block content
                     button(class="btn btn-success icon-wrapper") Reply
                   a(href=`/tweet/${t.id}`)
                     button(class="btn btn-success icon-wrapper") View Replies
+        
+        form.form(action="/tweet/notify" method="POST")
+          input(type="hidden" name="_csrf" value= csrfToken)
+          input.button(type="submit" value="Notify User")

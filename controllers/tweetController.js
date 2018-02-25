@@ -1,4 +1,5 @@
 const Tweet = require('../models/Tweet');
+const mail = require('../handlers/mail');
 
 exports.showHome = async (req, res) => {
   const tweets = await Tweet.find({})
@@ -63,5 +64,24 @@ exports.showExplore = async (req, res) => {
   res.render('explore', {
     title: 'Explore',
     tweets,
+  });
+};
+
+exports.notification = async (req, res) => {
+  // get user email from original tweet ID
+  const tweet = await Tweet
+    .findOne({ _id: req.params.id })
+    .populate('author');
+
+  console.log(tweet);
+
+  console.log('User is being notified via email');
+
+  // Send them an email with the Tweet URL
+  const tweetReplyURL = `http://${req.headers.host}/tweet/reply/`;
+  await mail.send({
+    filename: 'reply-notification',
+    subject: 'Reply Notification',
+    tweetReplyURL,
   });
 };

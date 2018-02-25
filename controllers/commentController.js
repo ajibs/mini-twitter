@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const tweetController = require('./tweetController');
 
 const Comment = mongoose.model('Comment');
 
@@ -9,6 +10,8 @@ exports.addComment = async (req, res) => {
   req.body.tweet = tweetID;
 
   await (new Comment(req.body)).save();
+
+  tweetController.notification(req, res);
 
   req.flash('success', 'Comment Saved!');
   res.redirect(`/tweet/${tweetID}`);
