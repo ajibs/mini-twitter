@@ -1,8 +1,7 @@
-const Experience = require('../models/Experience');
 const Tweet = require('../models/Tweet');
 
 exports.showHome = async (req, res) => {
-  const tours = await Experience.find({})
+  const tours = await Tweet.find({})
     .sort({ _id: -1 }) // sort according to the most recent
     .limit(3);
 
@@ -22,17 +21,38 @@ exports.addNewTweet = async (req, res) => {
 };
 
 
-exports.showSingleTour = async (req, res) => {
-  const tour = await Experience.findOne({ _id: req.params.id });
+exports.showSingleTweet = async (req, res) => {
+  const tweet = await Tweet
+    .findOne({ _id: req.params.id })
+    .populate('author comments');
+  
+    console.log(tweet);
+  // console.log(tweet.comments[0].author.local)
 
-  if (!tour) {
-    req.flash('failed', 'Error! Tour not found');
+  if (!tweet) {
+    req.flash('failed', 'Error! Tweet not found');
     res.redirect('back');
     return;
   }
 
-  res.render('tour-details', {
-    title: 'Tour Details',
-    tour,
+  res.render('tweet-details', {
+    title: 'Single Tweet',
+    tweet,
+  });
+};
+
+
+exports.showReplyField = async (req, res) => {
+  const tweet = await Tweet.findOne({ _id: req.params.id });
+
+  if (!tweet) {
+    req.flash('failed', 'Error! Tweet not found');
+    res.redirect('back');
+    return;
+  }
+
+  res.render('reply-tweet', {
+    title: 'Reply Tweet',
+    tweet,
   });
 };

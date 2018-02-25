@@ -1,7 +1,8 @@
-mixin jobInfo(key, data)
+mixin tweetInfo(header, data, authorName)
     div(class="row")
       div(class="col-md-10 col-md-offset-1 col-xs-12")
         div(class="job-group")
           h3(class="text-uppercase text-faded")
-            strong #{key}
+            strong #{header}
           p #{data}
+          p(class="text-faded") by #{authorName}

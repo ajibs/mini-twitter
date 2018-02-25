@@ -8,6 +8,12 @@ mongoose.connection.on('error', (err) => {
   console.error(`Error!: ${err.message}`);
 });
 
+
+// import all of our models
+require('./models/Comment');
+require('./models/Tweet');
+require('./models/User');
+
 const app = require('./app');
 
 app.listen(process.env.PORT, () => {

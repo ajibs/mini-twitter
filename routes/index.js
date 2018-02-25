@@ -3,6 +3,7 @@ const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 const tweetController = require('../controllers/tweetController');
 const utilitiesController = require('../controllers/utilitiesController');
+const commentController = require('../controllers/commentController');
 
 const { catchErrors } = require('../handlers/errorHandlers');
 
@@ -41,7 +42,18 @@ router.post(
 );
 
 
-router.get('/tour/:id', catchErrors(tweetController.showSingleTour));
+router.get('/tweet/:id', catchErrors(tweetController.showSingleTweet));
+
+router.get(
+  '/tweet/reply/:id',
+  authController.isLoggedIn,
+  catchErrors(tweetController.showReplyField),
+);
+router.post(
+  '/tweet/reply/:id',
+  authController.isLoggedIn,
+  catchErrors(commentController.addComment),
+);
 
 // router.get('/seed', catchErrors(tweetController.seedDB));
 

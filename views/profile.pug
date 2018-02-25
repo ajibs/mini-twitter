@@ -22,7 +22,7 @@ block content
                 div(class="card-body")
                   p(class="card-text") #{t.tweetContent}
                 div(class="card-footer")
-                  a(href=`/reply`)
+                  a(href=`/tweet/reply/${t.id}`)
                     button(class="btn btn-success icon-wrapper") Reply
-                  a(href=`/view-replies`)
+                  a(href=`/tweet/${t.id}`)
                     button(class="btn btn-success icon-wrapper") View Replies

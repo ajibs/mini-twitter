@@ -1,4 +1,5 @@
-const Experience = require('../models/Experience');
+const Tweet = require('../models/Tweet');
+
 const createDOMPurify = require('dompurify');
 const { JSDOM } = require('jsdom');
 
@@ -46,10 +47,10 @@ exports.seedDB = async (req, res) => {
     fullDescription: 'Enjoy the best of Lagos night life, Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur! Lorem ipsum dolor sit amet',
   };
 
-  Experience.remove({}, () => { // empty database then save documents
+  Tweet.remove({}, () => { // empty database then save documents
     let i = 0;
     while (i < 25) {
-      const tour = new Experience(demo);
+      const tour = new Tweet(demo);
       tour.save();
       i++;
     }

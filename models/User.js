@@ -6,27 +6,12 @@ const userSchema = new mongoose.Schema({
     username: {
       type: String,
       lowercase: true,
-      trim: true
+      trim: true,
     },
     password: {
-      type: String
-    }
+      type: String,
+    },
   },
-  facebook: {
-    id: String,
-    token: String,
-    name: String
-  },
-  twitter: {
-    id: String,
-    token: String,
-    name: String
-  },
-  google: {
-    id: String,
-    token: String,
-    name: String
-  }
 });
 
 
