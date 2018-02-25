@@ -24,7 +24,7 @@ exports.send = async (options) => {
   const text = htmlToText.fromString(html);
 
   const mailOptions = {
-    from: 'Twitterify <noreply@ajibs-twitterify.com>',
+    from: 'Twitterify <noreply@mini-twitterify.com>',
     to: options.recipient,
     subject: options.subject,
     html,

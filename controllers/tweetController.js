@@ -2,7 +2,9 @@ const Tweet = require('../models/Tweet');
 const mail = require('../handlers/mail');
 
 exports.showHome = async (req, res) => {
-  const tweets = await Tweet.find({})
+  const tweets = await Tweet
+    .find({})
+    .populate('author')
     .sort({ _id: -1 }) // sort according to the most recent
     .limit(3);
 
@@ -59,7 +61,9 @@ exports.showReplyField = async (req, res) => {
 
 
 exports.showExplore = async (req, res) => {
-  const tweets = await Tweet.find({})
+  const tweets = await Tweet
+    .find({})
+    .populate('author')
     .sort({ _id: -1 })
     .limit(18);
 
@@ -69,7 +73,8 @@ exports.showExplore = async (req, res) => {
   });
 };
 
-exports.notification = async (req, res) => {
+
+exports.notification = async (req) => {
   // get user email from main tweet ID
   const tweet = await Tweet
     .findOne({ _id: req.params.id })
@@ -98,5 +103,22 @@ exports.incrementLikes = async (req, res) => {
   tweet.likes += 1;
   await tweet.save();
 
+  req.flash('success', 'Your like has been registered');
   res.redirect('back');
+};
+
+
+exports.validateTweet = (req, res, next) => {
+  req.checkBody('tweetContent', 'You must supply tweet content!').notEmpty();
+
+  const errors = req.validationErrors();
+  if (errors) {
+    req.flash('error', errors.map(err => err.msg));
+    res.render('profile', {
+      title: 'Profile',
+      flashes: req.flash(),
+    });
+    return; // stop the fn running
+  }
+  next(); // there were no errors
 };

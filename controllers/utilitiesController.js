@@ -1,29 +1,12 @@
 const Tweet = require('../models/Tweet');
 const User = require('../models/User');
+const Comment = require('../models/Comment');
 
 const createDOMPurify = require('dompurify');
 const { JSDOM } = require('jsdom');
 
 const { window } = (new JSDOM(''));
 const DOMPurify = createDOMPurify(window);
-
-exports.validateTweet = (req, res, next) => {
-  req.checkBody('tweetContent', 'You must supply tweet tweetContent!').notEmpty();
-
-  const errors = req.validationErrors();
-  if (errors) {
-    const error = errors.map(err => err.msg);
-    res.json({
-      status: 400,
-      message: 'Create Post Error',
-      body: req.body,
-      error,
-    });
-    return; // stop the fn running
-  }
-  next(); // there were no errors
-};
-
 
 exports.sanitizeData = (req, res, next) => {
   if (req.query.q) {
@@ -44,27 +27,58 @@ exports.seedDB = async (req, res) => {
     likes: 2,
     author: '5a92b7fdcb71600d68a94013',
   };
-  const data = [
-    { tweetContent: 'Lunch was fantastic. I had some bacon and bread' },
-    { tweetContent: 'At Chaser, we only hire the best developers. Join us today' },
-    { tweetContent: 'The weather is so cold. I miss the heat' },
+  const tweetText = [
+    { _id: '58c039938060197ca0b52d4d', tweetContent: 'Lunch was fantastic. I rode the dragons afterwards.' },
+    { tweetContent: 'Winter is here.' },
+    { tweetContent: 'The weather is sooo cold. I miss the heat' },
     { tweetContent: 'Deep work has really helped me improve and made me happier' },
-    { tweetContent: 'Netflix and chill' },
-    { tweetContent: 'I love ice-cream' },
-    { tweetContent: 'The best people work really hard' },
+    { tweetContent: 'I am taking back the 7 kingdoms right after I defeat the night king' },
+    { tweetContent: 'I love John Snow!' },
+    { tweetContent: 'Being Queen is not as much fun as you would think.' },
     { tweetContent: 'Enjoy the journey' },
   ];
 
-  const demo = await data.map(singleTweet => Object.assign({}, baseData, singleTweet));
+  const tweets = await tweetText.map(singleTweet => Object.assign({}, baseData, singleTweet));
 
   await Tweet.remove({}, () => {
-    demo.forEach((tweet) => {
+    tweets.forEach((tweet) => {
       new Tweet(tweet).save();
     });
   });
 
-  res.json({
-    status: 200,
-    message: 'database seeded successfully',
+  const users = [{
+    _id: '5a92b7fdcb71600d68a94013',
+    local: {
+      firstName: 'daenerys targaryen',
+      email: 'motherofdragons@queen.com',
+      password: '1997f002c3db624',
+    },
+  }, {
+    _id: '58c03ada8060197ca0b52d52',
+    local: {
+      firstName: 'John Snow',
+      email: 'aegon@winterfell.com',
+      password: 'wkdfjf002c3db624',
+    },
+  }];
+  await User.remove({}, () => {
+    users.forEach((user) => {
+      new User(user).save();
+    });
   });
+
+  const comment = {
+    _id: '58c03ac18060197ca0b52d51',
+    author: '58c03ada8060197ca0b52d52',
+    reply: 'You tend to forget such words of wisdom when at war!',
+    tweet: '58c039938060197ca0b52d4d',
+  };
+  await Comment.remove({}, () => {
+    // users.forEach((user) => {
+      new Comment(comment).save();
+    // });
+  });
+
+  req.flash('success', 'Database Seeded Successfully');
+  res.redirect('/');
 };

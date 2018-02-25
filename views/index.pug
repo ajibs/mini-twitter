@@ -1,5 +1,7 @@
 extends layout
 
+include mixins/_tweetDeck
+
 block content
   header
     div(class="container")
@@ -18,19 +20,8 @@ block content
   section(class="container")
     div(class="form-container")
       h2(class="section-title") Featured Tweets
-      div(class="row")
-        each t in tweets
-            div(class="col-lg-4 col-md-6 mb-4 form-footer")
-              div(class="card h-100")
-                div(class="card-body")
-                  p(class="card-text") #{t.tweetContent}
-                div(class="card-footer")
-                  a(href=`/tweet/reply/${t.id}`)
-                    button(class="btn btn-success icon-wrapper") Reply
-                  a(href=`/tweet/${t.id}`)
-                    button(class="btn btn-success icon-wrapper") View Replies
-
-
+      if tweets
+        +tweetDeck(tweets)
 
       div(class="view-experiences")
         a(href="/explore" class="btn btn-lg btn-primary") Explore Tweets

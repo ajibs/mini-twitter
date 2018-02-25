@@ -84,6 +84,15 @@ If you'd like to continue full-stack development on this project, run the follow
 yarn dev
 ```
 
+Open up your web browser and visit the following url to seed the database:
+```bash
+http://localhost:4400/seed
+```
+
+Visit the following to access the home page
+```bash
+http://localhost:4400/
+```
 
 ## Built With
 - [Git](https://git-scm.com/) - Version Control

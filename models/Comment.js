@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-
 const commentSchema = new mongoose.Schema({
   author: {
     type: mongoose.Schema.ObjectId,

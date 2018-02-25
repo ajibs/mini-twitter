@@ -12,7 +12,7 @@ exports.addComment = async (req, res) => {
 
   await (new Comment(req.body)).save();
 
-  catchErrors(tweetController.notification(req, res));
+  catchErrors(tweetController.notification(req));
 
   req.flash('success', 'Comment Saved!');
   res.redirect(`/tweet/${tweetID}`);

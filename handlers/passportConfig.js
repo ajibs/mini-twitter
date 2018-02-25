@@ -5,6 +5,7 @@
 // load dependencies
 const User = require('../models/User');
 const LocalStrategy = require('passport-local').Strategy;
+const winston = require('winston');
 
 module.exports = (passport) => {
   /**
@@ -56,7 +57,7 @@ module.exports = (passport) => {
           await localUser.save();
           return done(null, localUser, req.flash('message', 'Local account signup successful'));
         } catch (e) {
-          console.error(e);
+          winston.log('error', `Error!: ${e}`);
         }
 
         // function gets here means local signup failed

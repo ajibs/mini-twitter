@@ -1,6 +1,7 @@
 extends layout
 
 include mixins/_tweetInfo
+include mixins/_reply
 
 block content
   section(class="container")
@@ -13,11 +14,5 @@ block content
       each comment in tweet.comments
         +tweetInfo('Reply', comment.reply, comment.author.local.firstName)
 
-      form(action=`/tweet/reply/${tweet.id}` method="post")
-        input(type="hidden" name="_csrf" value= csrfToken)
-        div(class="row")
-          div(class="form-group col-sm-8")
-            label(for='tweet')
-            textarea(class="form-control" type="text" name='reply' id='tweet' placeholder="Enter your reply here" maxlength="200" required)
-        div(form-footer form-group pull-right)
-          input(class="btn btn-success" type="submit" value="Reply")
+      +reply(tweet)
+      

@@ -7,9 +7,7 @@ const commentController = require('../controllers/commentController');
 
 const { catchErrors } = require('../handlers/errorHandlers');
 
-
 const router = express.Router();
-
 
 router.get('/', catchErrors(tweetController.showHome));
 
@@ -17,11 +15,16 @@ router.get('/signup', userController.showSignup);
 router.post(
   '/signup',
   userController.validateSignup,
+  utilitiesController.sanitizeData,
   authController.signup,
 );
 
 router.get('/login', userController.showLogin);
-router.post('/login', authController.login);
+router.post(
+  '/login',
+  utilitiesController.sanitizeData,
+  authController.login,
+);
 
 
 router.get('/logout', authController.logout);
@@ -36,7 +39,7 @@ router.get(
 router.post(
   '/create-tweet',
   authController.isLoggedIn,
-  utilitiesController.validateTweet,
+  tweetController.validateTweet,
   utilitiesController.sanitizeData,
   catchErrors(tweetController.addNewTweet),
 );

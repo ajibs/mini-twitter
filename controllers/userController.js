@@ -37,10 +37,12 @@ exports.validateSignup = (req, res, next) => {
 };
 
 exports.showProfile = async (req, res) => {
-  const tweets = await Tweet.find({})
+  const tweets = await Tweet
+    .find({})
+    .populate('author')
     .sort({ _id: -1 }) // sort according to the most recent
     .limit(5);
-  
+
   res.render('profile', {
     title: 'Profile',
     tweets,
