@@ -1,13 +1,13 @@
 const Tweet = require('../models/Tweet');
 
 exports.showHome = async (req, res) => {
-  const tours = await Tweet.find({})
+  const tweets = await Tweet.find({})
     .sort({ _id: -1 }) // sort according to the most recent
     .limit(3);
 
   res.render('index', {
     title: 'Home',
-    tours,
+    tweets,
   });
 };
 
@@ -25,9 +25,6 @@ exports.showSingleTweet = async (req, res) => {
   const tweet = await Tweet
     .findOne({ _id: req.params.id })
     .populate('author comments');
-  
-    console.log(tweet);
-  // console.log(tweet.comments[0].author.local)
 
   if (!tweet) {
     req.flash('failed', 'Error! Tweet not found');
@@ -54,5 +51,17 @@ exports.showReplyField = async (req, res) => {
   res.render('reply-tweet', {
     title: 'Reply Tweet',
     tweet,
+  });
+};
+
+
+exports.showExplore = async (req, res) => {
+  const tweets = await Tweet.find({})
+    .sort({ _id: -1 })
+    .limit(18);
+
+  res.render('explore', {
+    title: 'Explore',
+    tweets,
   });
 };

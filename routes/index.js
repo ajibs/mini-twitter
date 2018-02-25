@@ -55,6 +55,9 @@ router.post(
   catchErrors(commentController.addComment),
 );
 
+router.get('/explore', catchErrors(tweetController.showExplore));
+
+
 // router.get('/seed', catchErrors(tweetController.seedDB));
 
 
