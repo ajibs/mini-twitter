@@ -1,4 +1,5 @@
 const Tweet = require('../models/Tweet');
+const User = require('../models/User');
 
 const createDOMPurify = require('dompurify');
 const { JSDOM } = require('jsdom');
@@ -7,7 +8,7 @@ const { window } = (new JSDOM(''));
 const DOMPurify = createDOMPurify(window);
 
 exports.validateTweet = (req, res, next) => {
-  req.checkBody('tweetContent', 'You must supply tweet content!').notEmpty();
+  req.checkBody('tweetContent', 'You must supply tweet tweetContent!').notEmpty();
 
   const errors = req.validationErrors();
   if (errors) {
@@ -23,6 +24,7 @@ exports.validateTweet = (req, res, next) => {
   next(); // there were no errors
 };
 
+
 exports.sanitizeData = (req, res, next) => {
   if (req.query.q) {
     req.body = req.query;
@@ -36,26 +38,33 @@ exports.sanitizeData = (req, res, next) => {
 };
 
 
+// create some demo data
 exports.seedDB = async (req, res) => {
-  // create demo data
-  const demo = {
-    title: 'Clubbing at Quilox',
-    summary: 'Party with the stars',
-    location: 'lagos, nigeria',
-    price: 500,
-    date: '2017-12-27T00:00:00.000Z',
-    fullDescription: 'Enjoy the best of Lagos night life, Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur! Lorem ipsum dolor sit amet',
+  const baseData = {
+    likes: 2,
+    author: '5a92b7fdcb71600d68a94013',
   };
+  const data = [
+    { tweetContent: 'Lunch was fantastic. I had some bacon and bread' },
+    { tweetContent: 'At Chaser, we only hire the best developers. Join us today' },
+    { tweetContent: 'The weather is so cold. I miss the heat' },
+    { tweetContent: 'Deep work has really helped me improve and made me happier' },
+    { tweetContent: 'Netflix and chill' },
+    { tweetContent: 'I love ice-cream' },
+    { tweetContent: 'The best people work really hard' },
+    { tweetContent: 'Enjoy the journey' },
+  ];
 
-  Tweet.remove({}, () => { // empty database then save documents
-    let i = 0;
-    while (i < 25) {
-      const tour = new Tweet(demo);
-      tour.save();
-      i++;
-    }
+  const demo = await data.map(singleTweet => Object.assign({}, baseData, singleTweet));
+
+  await Tweet.remove({}, () => {
+    demo.forEach((tweet) => {
+      new Tweet(tweet).save();
+    });
   });
 
-  req.flash('success', 'Database Seeded Successfully');
-  res.redirect('/');
+  res.json({
+    status: 200,
+    message: 'database seeded successfully',
+  });
 };

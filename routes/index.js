@@ -61,10 +61,10 @@ router.get('/explore', catchErrors(tweetController.showExplore));
 router.post(
   '/tweet/likes/:id',
   authController.isLoggedIn,
-  catchErrors(tweetController.incrementLikes)
+  catchErrors(tweetController.incrementLikes),
 );
 
-// router.get('/seed', catchErrors(tweetController.seedDB));
+router.get('/seed', catchErrors(utilitiesController.seedDB));
 
 
 module.exports = router;
