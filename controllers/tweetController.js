@@ -84,3 +84,19 @@ exports.notification = async (req, res) => {
     tweetDetailsURL,
   });
 };
+
+
+exports.incrementLikes = async (req, res) => {
+  const tweet = await Tweet.findOne({ _id: req.params.id });
+
+  if (!tweet) {
+    req.flash('failed', 'Error! Tweet not found');
+    res.redirect('back');
+    return;
+  }
+
+  tweet.likes += 1;
+  await tweet.save();
+
+  res.redirect('back');
+};

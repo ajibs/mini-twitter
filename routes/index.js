@@ -58,7 +58,11 @@ router.post(
 
 
 router.get('/explore', catchErrors(tweetController.showExplore));
-
+router.post(
+  '/tweet/likes/:id',
+  authController.isLoggedIn,
+  catchErrors(tweetController.incrementLikes)
+);
 
 // router.get('/seed', catchErrors(tweetController.seedDB));
 

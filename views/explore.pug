@@ -14,3 +14,9 @@ block content
                     button(class="btn btn-success icon-wrapper") Reply
                   a(href=`/tweet/${t.id}`)
                     button(class="btn btn-success icon-wrapper") View Replies
+                  button(class="btn btn-success icon-wrapper") #{t.likes} Likes
+      
+                  form(action=`/tweet/likes/${t.id}` method="post")
+                    input(type="hidden" name="_csrf" value= csrfToken)
+                    div(form-footer form-group pull-right)
+                      input(class="btn btn-success" type="submit" value="Like")

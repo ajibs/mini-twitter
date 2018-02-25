@@ -40,7 +40,7 @@ exports.showProfile = async (req, res) => {
   const tweets = await Tweet.find({})
     .sort({ _id: -1 }) // sort according to the most recent
     .limit(5);
-
+  
   res.render('profile', {
     title: 'Profile',
     tweets,

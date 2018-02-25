@@ -18,7 +18,10 @@ const tweetSchema = new mongoose.Schema(
       ref: 'User',
       required: 'Tweet should have a valid User!',
     },
-    likes: [String],
+    likes: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     toObject: { virtuals: true },
