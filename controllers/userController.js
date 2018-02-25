@@ -15,9 +15,14 @@ exports.showLogin = (req, res) => {
 
 
 exports.validateSignup = (req, res, next) => {
-  req.checkBody('username', 'You must supply a name!').notEmpty();
-  req.sanitizeBody('username');
+  req.checkBody('email', 'You must supply an email address!').isEmail();
+  req.sanitizeBody('email').normalizeEmail({
+    remove_dots: false,
+    remove_extension: false,
+    gmail_remove_subaddress: false,
+  });
   req.checkBody('password', 'Password cannot be blank').notEmpty();
+  req.checkBody('firstName', 'You must supply a firstName!').notEmpty();
 
   const errors = req.validationErrors();
   if (errors) {

@@ -42,7 +42,7 @@ router.post(
 );
 
 
-router.get('/tweet/:id', catchErrors(tweetController.showSingleTweet));
+router.get('/tweet/:id', catchErrors(tweetController.showTweetDetails));
 
 router.get(
   '/tweet/reply/:id',
@@ -52,10 +52,10 @@ router.get(
 router.post(
   '/tweet/reply/:id',
   authController.isLoggedIn,
+  utilitiesController.sanitizeData,
   catchErrors(commentController.addComment),
 );
 
-// router.post('/tweet/notify', catchErrors(tweetController.notification));
 
 router.get('/explore', catchErrors(tweetController.showExplore));
 

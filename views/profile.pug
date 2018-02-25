@@ -4,7 +4,7 @@ block content
   section(class="container-fluid")
     div(class="form-container col-md-6 col-md-offset-3")
       if user.local
-        h3(class="text-uppercase") Welcome  #{user.local.username}
+        h3(class="text-uppercase") Welcome  #{user.local.firstName}
       h1 Creat a Tweet
       form(action="/create-tweet" method="post")
         input(type="hidden" name="_csrf" value= csrfToken)
@@ -26,7 +26,3 @@ block content
                     button(class="btn btn-success icon-wrapper") Reply
                   a(href=`/tweet/${t.id}`)
                     button(class="btn btn-success icon-wrapper") View Replies
-        
-        form.form(action="/tweet/notify" method="POST")
-          input(type="hidden" name="_csrf" value= csrfToken)
-          input.button(type="submit" value="Notify User")

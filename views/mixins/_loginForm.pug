@@ -4,8 +4,11 @@ mixin loginForm(actionType)
       form(action=`/${actionType}` method="POST")
         h2(class="text-uppercase") #{title}
         input(type="hidden" name="_csrf" value= csrfToken)
+        if actionType === 'signup'
+          div(class="form-group")
+            input(type="text" name="firstName" class="form-control" placeholder="enter first name" minlength="3" required)
         div(class="form-group")
-          input(type="text" name="username" class="form-control" placeholder="enter username" required)
+          input(type="email" name="email" class="form-control" placeholder="enter email address" required)
         div(class="form-group")
           input(type="password" name="password" class="form-control" placeholder="enter password" minlength="4" required)
         button(type="submit" class="btn btn-success btn-lg") Submit

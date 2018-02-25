@@ -22,7 +22,7 @@ exports.addNewTweet = async (req, res) => {
 };
 
 
-exports.showSingleTweet = async (req, res) => {
+exports.showTweetDetails = async (req, res) => {
   const tweet = await Tweet
     .findOne({ _id: req.params.id })
     .populate('author comments');
@@ -41,7 +41,9 @@ exports.showSingleTweet = async (req, res) => {
 
 
 exports.showReplyField = async (req, res) => {
-  const tweet = await Tweet.findOne({ _id: req.params.id });
+  const tweet = await Tweet
+    .findOne({ _id: req.params.id })
+    .populate('author');
 
   if (!tweet) {
     req.flash('failed', 'Error! Tweet not found');
@@ -68,20 +70,17 @@ exports.showExplore = async (req, res) => {
 };
 
 exports.notification = async (req, res) => {
-  // get user email from original tweet ID
+  // get user email from main tweet ID
   const tweet = await Tweet
     .findOne({ _id: req.params.id })
     .populate('author');
 
-  console.log(tweet);
-
-  console.log('User is being notified via email');
-
-  // Send them an email with the Tweet URL
-  const tweetReplyURL = `http://${req.headers.host}/tweet/reply/`;
+  // Send user an email with the Tweet URL
+  const tweetDetailsURL = `http://${req.headers.host}/tweet/${tweet._id}`;
   await mail.send({
+    recipient: tweet.author.local.email,
     filename: 'reply-notification',
     subject: 'Reply Notification',
-    tweetReplyURL,
+    tweetDetailsURL,
   });
 };

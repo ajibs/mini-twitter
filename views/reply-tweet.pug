@@ -8,7 +8,7 @@ block content
       div(class="row")
         div(class="col-md-10 col-md-offset-1 col-xs-12")
           div(class="job-group")
-      +tweetInfo('Single Tweet', tweet.tweetContent)
+      +tweetInfo('Main Tweet', tweet.tweetContent, tweet.author.local.firstName)
 
       form(action=`/tweet/reply/${tweet.id}` method="post")
         input(type="hidden" name="_csrf" value= csrfToken)
