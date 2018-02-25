@@ -68,7 +68,7 @@ module.exports = (passport) => {
 
   // local strategy for login
   passport.use('local-login', new LocalStrategy({
-    passReqToCallback: true
+    passReqToCallback: true,
   }, (req, email, password, done) => {
     process.nextTick(() => {
       // check if email exists

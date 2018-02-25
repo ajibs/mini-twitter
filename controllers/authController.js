@@ -29,5 +29,5 @@ exports.isLoggedIn = (req, res, next) => {
     return;
   }
 
-  return next(); // carry on! user is logged in
+  next(); // carry on! user is logged in
 };
